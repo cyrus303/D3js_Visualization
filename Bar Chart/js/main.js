@@ -16,7 +16,10 @@ var g = svg.append("g")
 var xAxisGroup = g.append("g")
 	.attr("class","bottom axis")
 	.attr("transform","translate(0, "+ (height) + ")")
-		
+
+var yAxisGroup = g.append("g")
+	.attr("class","left axis");
+
 //X scale
 var x = d3.scaleBand()
 	.range([0,width])
@@ -27,8 +30,7 @@ var x = d3.scaleBand()
 var y = d3.scaleLinear()
 	.range([height,0])
 	
-var yAxisGroup = g.append("g")
-	.attr("class","left axis");
+
 			
 
 g.append("text")
@@ -37,7 +39,7 @@ g.append("text")
 	.attr("y", (height + 40))
 	.attr("font-size","20px")
 	.attr("text-anchor","middle")
-	.attr("color","black")
+	//.attr("color","black")
 	.text("month");
 
 var yLabel = g.append("text")
@@ -47,7 +49,7 @@ var yLabel = g.append("text")
 	.attr("font-size","20px")
 	.attr("transform","rotate(-90)")
 	.attr("text-anchor","middle")
-	.attr("color","black")
+	//.attr("color","black")
 	.text("revenue");
 
 //data load
@@ -59,19 +61,20 @@ d3.json("data/revenues.json").then(function(data){
 	});
 
 	d3.interval(function(){
-		//var newdata = flag ? data : data.slice(2);
+		var newdata = flag ? data : data.slice(1);
 
-		update(data)
-		flag = !flag;
+		update(newdata)
+		flag = !flag
 	}, 1000);
 
-	update(data)
+	update(data);
 
 });
 
 function update(data){
 
 	var value = flag ? "revenue" : "profit";
+	
 	x.domain(data.map(function(d){ return (d.month )}));
 	y.domain([0, d3.max(data, function(d){ return d[value]})])
 
@@ -132,15 +135,12 @@ function update(data){
 				return x(d.month);
 			})
 
-			.attr("y", function(d){
-				return y(d[value])
-			})
+			.attr("y", y(0))
+			
 
 			.attr("width",(x.bandwidth ))
 
-			.attr("height",function(d){
-				return height - y(d[value]);
-			})
+			.attr("height",0)
 			.attr("fill","red")
 		//before merge enter method
 		.merge(rects)
@@ -149,6 +149,10 @@ function update(data){
 			.attr("y", function(d){
 				return y(d[value])
 			})
+			.attr("x",function(d){
+				return x(d.month);
+			})
+			.attr("width",(x.bandwidth ))
 			.attr("height",function(d){
 				return height - y(d[value]);
 			})
