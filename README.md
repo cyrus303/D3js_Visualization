@@ -1,2 +1,2 @@
-# D3js_Visualization
-Creating beautiful visualization using D3 js
+Visualization
+Creating beautiful and interactive data visualization using D3js and python.
