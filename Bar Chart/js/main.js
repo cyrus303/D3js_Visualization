@@ -24,7 +24,7 @@ var yAxisGroup = g.append("g")
 var x = d3.scaleBand()
 	.range([0,width])
 	.padding(0.2)//Inner(0.3)
-	//.paddingOuter(0.3);
+	////.paddingOuter(0.3);
 
 //Y scale
 var y = d3.scaleLinear()
